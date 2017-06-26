@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
 		ssize_t n;
 		char buf[64];
 		while ((n = read(from_child_pipe[0], buf, sizeof(buf))) != 0) {
+			write(STDOUT_FILENO, "read: ", 6);
 			write(STDOUT_FILENO, buf, n);
 		}
 		close(from_child_pipe[0]);
