@@ -3,6 +3,13 @@
 #include <stdio.h>
 
 int main(int argc, char** argv) {
+	if (argc < 2) {
+		fprintf(stderr, "no number given\n");
+		return 1;
+	}
+
+	char* number = argv[1];
+
 	int to_child_pipe[2];
 	if (pipe(to_child_pipe) == -1) {
 		perror("pipe");
@@ -32,12 +39,10 @@ int main(int argc, char** argv) {
 			perror("dup2");
 			exit(1);
 		}
-		char const* cmd = "./child";
-		if (argc > 1) {
-			cmd = "./echo";
-		}
+		char *const cmd = "./child";
 		char *const argv[] = {
 			cmd,
+			number,
 			NULL,
 		};
 		if (execvp(cmd, argv) == -1) {
@@ -63,6 +68,5 @@ int main(int argc, char** argv) {
 		while ((n = read(from_child_pipe[0], buf, sizeof(buf))) != 0) {
 			write(STDOUT_FILENO, buf, n);
 		}
-		sleep(1);
 	}
 }
