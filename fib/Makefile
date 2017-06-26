@@ -17,4 +17,4 @@ child: child.o
 	$(CC) $(LDFLAGS) $< -c
 
 clean:
-	$(RM) main *.o
+	$(RM) main child *.o
