@@ -10,7 +10,7 @@ static int fib(int n) {
 
 int main(int argc, char** argv) {
 	int n = atoi(argv[1]);
-	printf("%d\n", fib(n));
-	fprintf(stderr, "child: finish\n");
-	return 0;
+	// printf("%d\n", fib(n));
+	// fprintf(stderr, "child: finish\n");
+	return fib(n);
 }
