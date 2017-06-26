@@ -1,7 +1,7 @@
 ifeq ($(NOPIE),1)
 	LDFLAGS +=
 else
-	LDFLAGS += -fPIE -fpie
+	LDFLAGS += -fPIE -pie
 endif
 
 .PHONY: all
