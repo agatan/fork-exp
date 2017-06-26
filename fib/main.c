@@ -33,6 +33,7 @@ int main(int argc, char** argv) {
 	}
 	if (cpid == 0) {
 		// child
+		fprintf(stderr, "spawn child\n");
 		close(to_child_pipe[1]);
 		close(from_child_pipe[0]);
 		if (dup2(to_child_pipe[0], 0) == -1) {
@@ -55,6 +56,7 @@ int main(int argc, char** argv) {
 		}
 	} else {
 		// parent
+		fprintf(stderr, "parent\n");
 		close(to_child_pipe[0]);
 		close(to_child_pipe[1]);
 		close(from_child_pipe[1]);
