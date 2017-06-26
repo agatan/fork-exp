@@ -56,22 +56,16 @@ int main(int argc, char** argv) {
 	} else {
 		// parent
 		close(to_child_pipe[0]);
-		close(from_child_pipe[1]);
-		size_t i;
-		char buf[4096];
-		for (i = 0; i < 100; i++) {
-			ssize_t n;
-			if ((n = sprintf(buf, "%ld\n", i)) < 0) {
-				perror("sprintf");
-				exit(1);
-			}
-			write(to_child_pipe[1], buf, n);
-		}
 		close(to_child_pipe[1]);
+		close(from_child_pipe[1]);
 		ssize_t n;
+		char buf[64];
 		while ((n = read(from_child_pipe[0], buf, sizeof(buf))) != 0) {
 			write(STDOUT_FILENO, buf, n);
 		}
+		close(from_child_pipe[0]);
+
+		fprintf(stderr, "parent: close all pipes\n");
 
 		gettimeofday(&e, NULL);
     printf("time = %ldusec\n", (e.tv_sec - s.tv_sec) * 1000000 + (e.tv_usec - s.tv_usec));
