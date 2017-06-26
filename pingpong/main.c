@@ -1,12 +1,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
 
 static inline void pinger(int to_fd, int from_fd, int count) {
 	int i;
 	char buf[64];
 	for (i = 0; i < count; i++) {
-		printf("#%d\n", i);
 		if (write(to_fd, "ping\n", 5) != 5) {
 			perror("write ping");
 			exit(1);
@@ -37,6 +37,9 @@ int main(int argc, char** argv) {
 		perror("pipe");
 		exit(1);
 	}
+
+	struct timeval s, e;
+	gettimeofday(&s, NULL);
 
 	pid_t cpid;
 	cpid = fork();
@@ -73,6 +76,9 @@ int main(int argc, char** argv) {
 	close(from_child_pipe[1]);
 
 	pinger(to_child_pipe[1], from_child_pipe[0], count);
+
+	gettimeofday(&e, NULL);
+	printf("time = %ldusec\n", (e.tv_sec - s.tv_sec) * 1000000 + (e.tv_usec - s.tv_usec));
 
 	return 0;
 }

@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
 
 int main(int argc, char** argv) {
 	if (argc < 2) {
@@ -20,6 +21,9 @@ int main(int argc, char** argv) {
 		perror("pipe");
 		exit(1);
 	}
+
+	struct timeval s, e;
+	gettimeofday(&s, NULL);
 
 	pid_t cpid;
 	cpid = fork();
@@ -68,5 +72,8 @@ int main(int argc, char** argv) {
 		while ((n = read(from_child_pipe[0], buf, sizeof(buf))) != 0) {
 			write(STDOUT_FILENO, buf, n);
 		}
+
+		gettimeofday(&e, NULL);
+    printf("time = %ldusec\n", (e.tv_sec - s.tv_sec) * 1000000 + (e.tv_usec - s.tv_usec));
 	}
 }
