@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <sys/time.h>
 
+#define RDTSC(X) asm volatile ("rdtsc" : "=A"(X))
+
 static inline void pinger(int to_fd, int from_fd, int count) {
 	int i;
 	char buf[64];
@@ -43,6 +45,8 @@ int main(int argc, char** argv) {
 
 	struct timeval s, e;
 	gettimeofday(&s, NULL);
+	uint64_t x;
+	RDTSC(x);
 
 	pid_t cpid;
 	cpid = fork();
@@ -79,6 +83,10 @@ int main(int argc, char** argv) {
 	close(from_child_pipe[1]);
 
 	pinger(to_child_pipe[1], from_child_pipe[0], count);
+
+	uint64_t y;
+	RDTSC(y);
+	printf("elapsed tsc = %lld : %lld / %lld\n", y-x, x, y);
 
 	gettimeofday(&e, NULL);
 	printf("time = %ldusec\n", (e.tv_sec - s.tv_sec) * 1000000 + (e.tv_usec - s.tv_usec));
