@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <stdint.h>
 
 #define RDTSC(X) asm volatile ("rdtsc" : "=A"(X))
 
