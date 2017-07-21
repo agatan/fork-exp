@@ -7,10 +7,12 @@ static inline void ponger(int to_fd, int from_fd, int count) {
 	int i;
 	char buf[64];
 	for (i = 0; i < count; i++) {
+		fprintf(stderr, "child: #%d\n", i);
 		if (read(from_fd, buf, 5) != 5) {
 			perror("read ping");
 			exit(1);
 		}
+		fprintf(stderr, "child: read\n");
 		buf[5] = '\0';
 		if (strncmp("ping\n", buf, 6) != 0) {
 			fprintf(stderr, "recieved message is not ping, but %s\n", buf);
@@ -20,6 +22,7 @@ static inline void ponger(int to_fd, int from_fd, int count) {
 			perror("write pong");
 			exit(1);
 		}
+		fprintf(stderr, "child: write\n");
 	}
 }
 

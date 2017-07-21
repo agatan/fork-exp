@@ -9,17 +9,17 @@ static inline void pinger(int to_fd, int from_fd, int count) {
 	int i;
 	char buf[64];
 	for (i = 0; i < count; i++) {
-		fprintf(stderr, "#%d\n", i);
+		fprintf(stderr, "parent: #%d\n", i);
 		if (write(to_fd, "ping\n", 5) != 5) {
 			perror("write ping");
 			exit(1);
 		}
-		fprintf(stderr, "write\n");
+		fprintf(stderr, "parent: write\n");
 		if (read(from_fd, buf, 5) != 5) {
 			perror("read pong");
 			exit(1);
 		}
-		fprintf(stderr, "read\n");
+		fprintf(stderr, "parent: read\n");
 	}
 }
 
