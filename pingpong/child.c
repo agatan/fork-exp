@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <string.h>
 
-static inline void ponger(int to_fd, int from_fd, int count) {
+static inline void ponger(int to_fd, int from_fd) {
 	int i;
 	char buf[64];
-	for (i = 0; i < count; i++) {
+	for (i = 0; ; i++) {
 		fprintf(stderr, "child: #%d\n", i);
 		if (read(from_fd, buf, 5) != 5) {
 			perror("read ping");
@@ -28,6 +28,6 @@ static inline void ponger(int to_fd, int from_fd, int count) {
 
 int main(int argc, char** argv) {
 	int count = atoi(argv[1]);
-	ponger(1, 0, count);
+	ponger(1, 0);
 	return 0;
 }
