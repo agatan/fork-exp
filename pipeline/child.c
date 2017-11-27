@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
+static char *pages;
+
 static inline void spawn(int nchild) {
 	int from_child_pipe[2];
 	int to_child_pipe[2];
@@ -71,6 +73,7 @@ static inline void spawn(int nchild) {
 				exit(1);
 			}
 			write(1, "pong", 4);
+			memset(pages, n, getpagesize() * 4);
 		}
 	}
 }
@@ -97,6 +100,8 @@ static inline void ponger() {
 }
 
 int main(int argc, char** argv) {
+	pages = malloc(getpagesize() * 4);
+	memset(pages, 0, getpagesize() * 4);
 	int nchild = atoi(argv[1]);
 	if (nchild == 0) {
 		ponger();
